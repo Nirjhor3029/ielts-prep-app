@@ -46,6 +46,41 @@ export default function Dashboard() {
     );
   }
 
+  if (chapters.length === 0) {
+    return (
+      <Layout>
+        <div className="min-h-screen pb-24 md:pb-8">
+          <header className="bg-background flex items-center justify-between px-container-padding h-16 w-full max-w-[768px] mx-auto sticky top-0 z-40">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center border-2 border-white shadow-sm">
+                <span className="material-symbols-outlined text-on-primary-container">person</span>
+              </div>
+              <span className="font-headline-md text-headline-md font-bold text-primary">IELTS Prep</span>
+            </div>
+            <Link to="/profile" className="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95">
+              <span className="material-symbols-outlined">settings</span>
+            </Link>
+          </header>
+
+          <main className="max-w-[768px] mx-auto px-container-padding flex flex-col items-center justify-center text-center gap-lg pt-12">
+            <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">
+              Welcome, {user?.name}!
+            </h1>
+            <p className="font-body-md text-on-surface-variant">
+              No chapters available yet. Start by checking the Modules tab for new content.
+            </p>
+            <Link
+              to="/modules"
+              className="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-[0.98]"
+            >
+              Browse Modules
+            </Link>
+          </main>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div className="min-h-screen pb-24 md:pb-8">

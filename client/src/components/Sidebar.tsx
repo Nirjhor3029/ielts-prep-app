@@ -13,7 +13,7 @@ export default function Sidebar({ active = 'home' }: SidebarProps) {
   ];
 
   return (
-    <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 flex-col bg-surface-container-lowest border-r border-outline-variant z-50">
+    <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 flex-col bg-surface-container-lowest dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline-variant z-50 transition-colors">
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
           <span className="material-symbols-outlined text-on-primary text-xl">school</span>

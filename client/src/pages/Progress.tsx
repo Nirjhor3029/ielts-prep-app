@@ -24,9 +24,55 @@ export default function Progress() {
     );
   }
 
+  const hasData = stats?.summary?.totalAttempts > 0;
+
   const avgScore = stats?.summary?.averageScore
     ? (stats.summary.averageScore).toFixed(1)
     : '0.0';
+
+  if (!hasData) {
+    return (
+      <Layout active="progress">
+        <div className="min-h-screen pb-24 md:pb-8">
+          <header className="bg-background fixed md:static top-0 w-full z-50 h-16 flex items-center justify-between px-container-padding">
+            <h1 className="font-headline-md text-headline-md font-bold tracking-tight">IELTS Prep</h1>
+          </header>
+
+          <main className="pt-20 md:pt-6 px-container-padding max-w-[768px] mx-auto flex flex-col items-center justify-center text-center gap-lg">
+            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="material-symbols-outlined text-primary" style={{ fontSize: '48px' }}>bar_chart</span>
+            </div>
+            <div>
+              <h2 className="font-headline-md text-headline-md text-on-surface font-bold mb-2">No Progress Yet</h2>
+              <p className="font-body-md text-on-surface-variant">Complete a practice or test to start tracking your progress here.</p>
+            </div>
+            <Link
+              to="/modules"
+              className="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-[0.98]"
+            >
+              Start Learning
+            </Link>
+
+            <Link
+              to="/mistakes"
+              className="w-full mt-lg bg-secondary-container rounded-xl p-lg shadow-[0_8px_20px_0px_rgba(0,0,0,0.08)] flex items-center justify-between text-left active:scale-[0.98] transition-transform block"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-white/40 p-3 rounded-lg">
+                  <span className="material-symbols-outlined text-on-secondary-container">auto_stories</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-on-secondary-container text-body-lg">Mistake Notebook</h3>
+                  <p className="font-body-md text-on-secondary-container/80">Review your tricky items</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-on-secondary-container">arrow_forward</span>
+            </Link>
+          </main>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout active="progress">

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuthStore } from './stores/authStore';
+import { useThemeStore } from './stores/themeStore';
 import { analyticsAPI } from './lib/api';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -53,6 +54,7 @@ export default function App() {
 
   useEffect(() => {
     initialize();
+    useThemeStore.getState().init();
     analyticsAPI.trackVisit(false).catch(() => {});
   }, [initialize]);
 

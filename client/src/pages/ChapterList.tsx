@@ -26,6 +26,33 @@ export default function ChapterList() {
     );
   }
 
+  if (chapters.length === 0) {
+    return (
+      <Layout active="modules">
+        <div className="min-h-screen pb-24 md:pb-8">
+          <header className="bg-background fixed md:static top-0 w-full z-50 flex items-center justify-between px-container-padding h-16">
+            <div className="flex items-center gap-4">
+              <Link to="/" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-90 md:hidden">
+                <span className="material-symbols-outlined text-primary">arrow_back</span>
+              </Link>
+              <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">Grammar Chapters</h1>
+            </div>
+          </header>
+
+          <main className="w-full max-w-[768px] pt-20 md:pt-6 pb-24 px-container-padding flex flex-col items-center justify-center text-center gap-lg">
+            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="material-symbols-outlined text-primary" style={{ fontSize: '48px' }}>menu_book</span>
+            </div>
+            <div>
+              <h2 className="font-headline-md text-headline-md text-on-surface font-bold mb-2">No Chapters Yet</h2>
+              <p className="font-body-md text-on-surface-variant">Chapters will appear here once an admin adds them. Check back soon!</p>
+            </div>
+          </main>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout active="modules">
       <div className="min-h-screen pb-24 md:pb-8">

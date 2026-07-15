@@ -71,6 +71,9 @@ export const mistakesAPI = {
       `/mistakes${chapterId ? `?chapterId=${chapterId}` : ''}`
     ),
 
+  stats: () =>
+    request<{ total: number; unreviewedCount: number; byChapter: any[] }>('/mistakes/stats'),
+
   review: (id: string) =>
     request<{ mistake: any }>(`/mistakes/${id}/review`, { method: 'POST' }),
 
@@ -100,4 +103,12 @@ export const analyticsAPI = {
       method: 'POST',
       body: JSON.stringify({ isNewUser }),
     }),
+
+  dashboard: () =>
+    request<{
+      summary: { totalUsers: number; totalAttempts: number; overallAvg: string; todayVisitors: number };
+      dailyVisitors: { date: string; visitors: number; newUsers: number; returningUsers: number }[];
+      chapterStats: { title: string; slug: string; difficulty: string; attempts: number; avgScorePercent: number; accuracy: number }[];
+      userRanking: { name: string; email: string; role: string; attempts: number; totalCorrect: number; accuracy: number; bestScore: number }[];
+    }>('/analytics/dashboard'),
 };

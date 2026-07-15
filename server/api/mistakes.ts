@@ -25,6 +25,49 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+router.get('/stats', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+
+    const total = await Mistake.countDocuments({ userId });
+    const unreviewedCount = await Mistake.countDocuments({ userId, reviewCount: 0 });
+
+    const byChapter = await Mistake.aggregate([
+      { $match: { userId: req.user!.userId } },
+      {
+        $group: {
+          _id: '$chapterId',
+          count: { $sum: 1 },
+          unreviewed: { $sum: { $cond: [{ $eq: ['$reviewCount', 0] }, 1, 0] } },
+        },
+      },
+      {
+        $lookup: {
+          from: 'chapters',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'chapter',
+        },
+      },
+      { $unwind: { path: '$chapter', preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          chapterId: '$_id',
+          title: { $ifNull: ['$chapter.title', 'Unknown'] },
+          count: 1,
+          unreviewed: 1,
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    res.json({ total, unreviewedCount, byChapter });
+  } catch (error) {
+    console.error('Get mistake stats error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 router.post('/:id/review', authMiddleware, async (req: Request, res: Response) => {
   try {
     const mistake = await Mistake.findOneAndUpdate(

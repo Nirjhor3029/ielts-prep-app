@@ -4,6 +4,7 @@ import { Attempt } from '../models/Attempt.js';
 import { Mistake } from '../models/Mistake.js';
 import { User } from '../models/User.js';
 import { Chapter } from '../models/Chapter.js';
+import { Analytics } from '../models/Analytics.js';
 
 const router = Router();
 
@@ -81,6 +82,24 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       },
       lastActiveAt: new Date(),
     });
+
+    // Update daily analytics
+    const today = new Date().toISOString().split('T')[0];
+    const scorePercent = answers.length > 0 ? (score / answers.length) * 100 : 0;
+    await Analytics.findOneAndUpdate(
+      { date: today },
+      {
+        $inc: { totalAttempts: 1 },
+        $set: { averageScore: scorePercent },
+        $push: {
+          topChapters: {
+            $each: [{ chapterId: String(chapterId), count: 1 }],
+            $slice: -20,
+          },
+        },
+      },
+      { upsert: true }
+    );
 
     res.status(201).json({
       attempt: {

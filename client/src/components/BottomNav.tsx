@@ -13,7 +13,7 @@ export default function BottomNav({ active = 'home' }: BottomNavProps) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[768px] h-20 flex justify-around items-center px-4 bg-surface-container-lowest z-50 rounded-t-xl shadow-[0_-4px_12px_0px_rgba(0,0,0,0.05)]">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[768px] h-20 flex justify-around items-center px-4 bg-surface-container-lowest z-50 rounded-t-xl shadow-[0_-4px_12px_0px_rgba(0,0,0,0.05)] md:hidden">
       {items.map((item) => {
         const isActive = item.key === active;
         return (

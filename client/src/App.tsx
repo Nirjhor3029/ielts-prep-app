@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuthStore } from './stores/authStore';
+import { analyticsAPI } from './lib/api';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -52,6 +53,7 @@ export default function App() {
 
   useEffect(() => {
     initialize();
+    analyticsAPI.trackVisit(false).catch(() => {});
   }, [initialize]);
 
   if (isLoading) {

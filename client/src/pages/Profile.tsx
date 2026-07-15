@@ -27,15 +27,15 @@ export default function Profile() {
 
           <div className="grid grid-cols-3 gap-md">
             <div className="bg-surface-container-low rounded-xl p-md text-center">
-              <span className="font-headline-md text-headline-md text-primary block">{user?.totalCorrect || 0}</span>
-              <span className="font-caption text-caption text-on-surface-variant">Correct</span>
+              <span className="font-headline-md text-headline-md text-primary block">{user?.xp || 0}</span>
+              <span className="font-caption text-caption text-on-surface-variant">XP</span>
             </div>
             <div className="bg-surface-container-low rounded-xl p-md text-center">
-              <span className="font-headline-md text-headline-md text-primary block">{user?.totalAttempts || 0}</span>
-              <span className="font-caption text-caption text-on-surface-variant">Attempts</span>
+              <span className="font-headline-md text-headline-md text-secondary block">Lv.{user?.level || 1}</span>
+              <span className="font-caption text-caption text-on-surface-variant">Level</span>
             </div>
             <div className="bg-surface-container-low rounded-xl p-md text-center">
-              <span className="font-headline-md text-headline-md text-secondary block">{user?.streak || 0}</span>
+              <span className="font-headline-md text-headline-md text-tertiary block">{user?.streak || 0}</span>
               <span className="font-caption text-caption text-on-surface-variant">Streak</span>
             </div>
           </div>

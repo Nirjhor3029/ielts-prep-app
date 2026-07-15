@@ -10,6 +10,11 @@ export interface IUserDoc extends Document {
   totalCorrect: number;
   totalAttempts: number;
   lastActiveAt?: Date;
+  xp: number;
+  level: number;
+  lastStudyDate?: Date;
+  streakFreezes: number;
+  achievements: string[];
 }
 
 const UserSchema = new Schema<IUserDoc>({
@@ -22,6 +27,11 @@ const UserSchema = new Schema<IUserDoc>({
   totalCorrect: { type: Number, default: 0 },
   totalAttempts: { type: Number, default: 0 },
   lastActiveAt: { type: Date },
+  xp: { type: Number, default: 0 },
+  level: { type: Number, default: 1 },
+  lastStudyDate: { type: Date },
+  streakFreezes: { type: Number, default: 0 },
+  achievements: [{ type: String }],
 }, { timestamps: true });
 
 UserSchema.index({ email: 1 }, { unique: true });

@@ -50,6 +50,10 @@ router.post('/register', async (req: Request, res: Response) => {
         streak: user.streak,
         totalCorrect: user.totalCorrect,
         totalAttempts: user.totalAttempts,
+        xp: user.xp,
+        level: user.level,
+        streakFreezes: user.streakFreezes,
+        achievements: user.achievements,
       },
     });
   } catch (error) {
@@ -96,6 +100,10 @@ router.post('/login', async (req: Request, res: Response) => {
         streak: user.streak,
         totalCorrect: user.totalCorrect,
         totalAttempts: user.totalAttempts,
+        xp: user.xp,
+        level: user.level,
+        streakFreezes: user.streakFreezes,
+        achievements: user.achievements,
       },
     });
   } catch (error) {
@@ -122,7 +130,11 @@ router.get('/me', authMiddleware, async (req: Request, res: Response) => {
         streak: user.streak,
         totalCorrect: user.totalCorrect,
         totalAttempts: user.totalAttempts,
-        createdAt: user.createdAt,
+        xp: user.xp,
+        level: user.level,
+        streakFreezes: user.streakFreezes,
+        achievements: user.achievements,
+        createdAt: (user as any).createdAt,
       },
     });
   } catch (error) {

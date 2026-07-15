@@ -1,4 +1,4 @@
-import type { IChapter, IQuestionSet, IQuestion, IAttempt, IMistake, IAnalytics } from '../types';
+import type { IChapter, IQuestionSet, IQuestion, IAttempt, IMistake, IAnalytics, IUserProgress, IVocabSentence, IProgressStats } from '../types';
 
 const API_BASE = '/api';
 
@@ -111,4 +111,60 @@ export const analyticsAPI = {
       chapterStats: { title: string; slug: string; difficulty: string; attempts: number; avgScorePercent: number; accuracy: number }[];
       userRanking: { name: string; email: string; role: string; attempts: number; totalCorrect: number; accuracy: number; bestScore: number }[];
     }>('/analytics/dashboard'),
+};
+
+// Progress
+export const progressAPI = {
+  get: (chapterId: string) =>
+    request<{ progress: IUserProgress }>(`/progress/${chapterId}`),
+
+  markCard: (chapterId: string, topic: string) =>
+    request<{ progress: IUserProgress }>(`/progress/${chapterId}/card`, {
+      method: 'POST',
+      body: JSON.stringify({ topic }),
+    }),
+
+  savePractice: (chapterId: string, score: number) =>
+    request<{ progress: IUserProgress; xpGain: number }>(`/progress/${chapterId}/practice`, {
+      method: 'POST',
+      body: JSON.stringify({ score }),
+    }),
+
+  saveChallenge: (chapterId: string, score: number, totalQuestions: number) =>
+    request<{ progress: IUserProgress; xpGain: number; stars: number }>(`/progress/${chapterId}/challenge`, {
+      method: 'POST',
+      body: JSON.stringify({ score, totalQuestions }),
+    }),
+
+  updateVocab: (chapterId: string, word: string, stage: string) =>
+    request<{ progress: IUserProgress; xpGain: number }>(`/progress/${chapterId}/vocab`, {
+      method: 'POST',
+      body: JSON.stringify({ word, stage }),
+    }),
+
+  addSentence: (chapterId: string, word: string, sentence: string) =>
+    request<{ sentence: IVocabSentence; xpGain: number }>(`/progress/${chapterId}/sentence`, {
+      method: 'POST',
+      body: JSON.stringify({ word, sentence }),
+    }),
+
+  getSentences: (chapterId: string, word?: string) =>
+    request<{ sentences: IVocabSentence[] }>(`/progress/${chapterId}/sentences${word ? `?word=${word}` : ''}`),
+
+  likeSentence: (sentenceId: string) =>
+    request<{ sentence: IVocabSentence; liked: boolean }>(`/progress/sentences/${sentenceId}/like`, {
+      method: 'POST',
+    }),
+
+  getReviewDue: () =>
+    request<{ reviewDue: any[] }>('/progress/review-due'),
+
+  completeReview: (chapterId: string, score: number) =>
+    request<{ progress: IUserProgress }>(`/progress/review`, {
+      method: 'POST',
+      body: JSON.stringify({ chapterId, score }),
+    }),
+
+  getStats: () =>
+    request<{ stats: IProgressStats }>('/progress/stats'),
 };

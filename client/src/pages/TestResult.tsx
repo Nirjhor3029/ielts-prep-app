@@ -37,6 +37,12 @@ export default function TestResult() {
   const circumference = 2 * Math.PI * 80;
   const dashoffset = circumference - (scorePercent / 100) * circumference;
 
+  // Star calculation
+  let stars = 0;
+  if (scorePercent >= 90) stars = 3;
+  else if (scorePercent >= 70) stars = 2;
+  else if (scorePercent > 0) stars = 1;
+
   const toggleQuestion = (id: string) => {
     const next = new Set(expandedQuestions);
     if (next.has(id)) next.delete(id);
@@ -74,6 +80,19 @@ export default function TestResult() {
           <h2 className="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">
             {scorePercent >= 80 ? 'Excellent work!' : scorePercent >= 60 ? 'Great effort!' : 'Keep practicing!'}
           </h2>
+          {attempt.mode === 'test' && (
+            <div className="flex items-center gap-1 mb-2">
+              {[1, 2, 3].map((s) => (
+                <span
+                  key={s}
+                  className={`material-symbols-outlined text-3xl ${s <= stars ? 'text-secondary' : 'text-surface-variant'}`}
+                  style={{ fontVariationSettings: s <= stars ? "'FILL' 1" : "'FILL' 0" }}
+                >
+                  star
+                </span>
+              ))}
+            </div>
+          )}
           <p className="font-body-md text-body-md text-on-surface-variant">
             {scorePercent >= 80
               ? 'Outstanding performance! You really know your grammar.'

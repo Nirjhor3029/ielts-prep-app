@@ -6,6 +6,7 @@ import attemptsRouter from './attempts.js';
 import mistakesRouter from './mistakes.js';
 import adminRouter from './admin.js';
 import analyticsRouter from './analytics.js';
+import progressRouter from './progress.js';
 
 const app = Router();
 
@@ -15,6 +16,7 @@ app.use('/attempts', attemptsRouter);
 app.use('/mistakes', mistakesRouter);
 app.use('/admin', adminRouter);
 app.use('/analytics', analyticsRouter);
+app.use('/progress', progressRouter);
 
 // Health check
 app.get('/health', (_req, res) => {

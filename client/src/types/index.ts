@@ -9,6 +9,11 @@ export interface IUser {
   totalCorrect: number;
   totalAttempts: number;
   lastActiveAt?: string;
+  xp: number;
+  level: number;
+  lastStudyDate?: string;
+  streakFreezes: number;
+  achievements: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -32,6 +37,14 @@ export interface IQuestionSet {
   questions: IQuestion[];
 }
 
+export interface IVocabItem {
+  _id: string;
+  word: string;
+  meaning: string;
+  example: string;
+  partOfSpeech: string;
+}
+
 export interface IChapter {
   _id: string;
   module: 'grammar' | 'vocabulary' | 'reading' | 'listening' | 'writing';
@@ -43,6 +56,8 @@ export interface IChapter {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   notes: string;
   icon: string;
+  subTopics: string[];
+  vocab: IVocabItem[];
   questionSets: IQuestionSet[];
   isPublished: boolean;
   createdAt: string;
@@ -100,4 +115,49 @@ export interface ChapterWithProgress extends IChapter {
   lastScore?: string;
   lastAttemptDate?: string;
   completedAttempts: number;
+}
+
+export interface IUserProgress {
+  _id: string;
+  userId: string;
+  chapterId: string;
+  cardsRead: string[];
+  practiceScore: number;
+  practiceCompleted: boolean;
+  challengeScore: number;
+  challengeCompleted: boolean;
+  stars: number;
+  vocabStagesCompleted: { word: string; stages: string[] }[];
+  vocabSentences: { word: string; sentence: string; createdAt: string }[];
+  totalTimeSpent: number;
+  lastStudiedAt?: string;
+  nextReviewAt?: string;
+  reviewInterval: number;
+  reviewCount: number;
+  status: 'not_started' | 'in_progress' | 'completed' | 'mastered';
+  masteredAt?: string;
+}
+
+export interface IVocabSentence {
+  _id: string;
+  userId: { _id: string; name: string; avatarUrl?: string } | string;
+  chapterId: string;
+  word: string;
+  sentence: string;
+  likes: number;
+  likedBy: string[];
+  createdAt: string;
+}
+
+export interface IProgressStats {
+  totalChaptersStarted: number;
+  totalChaptersMastered: number;
+  averageChallengeScore: number;
+  totalStars: number;
+  totalTimeSpent: number;
+  xp: number;
+  level: number;
+  streak: number;
+  streakFreezes: number;
+  achievements: string[];
 }

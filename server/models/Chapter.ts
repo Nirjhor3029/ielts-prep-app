@@ -15,6 +15,13 @@ const QuestionSetSchema = new Schema({
   questions: [QuestionSchema],
 }, { _id: true });
 
+const VocabSchema = new Schema({
+  word: { type: String, required: true },
+  meaning: { type: String, required: true },
+  example: { type: String, required: true },
+  partOfSpeech: { type: String, required: true },
+}, { _id: true });
+
 export interface IChapterDoc extends Document {
   module: string;
   title: string;
@@ -25,6 +32,13 @@ export interface IChapterDoc extends Document {
   difficulty: string;
   notes: string;
   icon: string;
+  subTopics: string[];
+  vocab: mongoose.Types.DocumentArray<{
+    word: string;
+    meaning: string;
+    example: string;
+    partOfSpeech: string;
+  }>;
   questionSets: mongoose.Types.DocumentArray<{
     type: string;
     title: string;
@@ -50,6 +64,8 @@ const ChapterSchema = new Schema<IChapterDoc>({
   difficulty: { type: String, enum: ['beginner', 'intermediate', 'advanced'], default: 'beginner' },
   notes: { type: String, default: '' },
   icon: { type: String, default: 'menu_book' },
+  subTopics: [{ type: String }],
+  vocab: [VocabSchema],
   questionSets: [QuestionSetSchema],
   isPublished: { type: Boolean, default: false },
 }, { timestamps: true });

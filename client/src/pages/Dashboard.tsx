@@ -106,6 +106,24 @@ export default function Dashboard() {
             </p>
           </section>
 
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-surface-container-lowest rounded-xl p-3 text-center">
+              <span className="material-symbols-outlined text-secondary text-[24px]">local_fire_department</span>
+              <span className="block font-headline-md text-headline-md text-on-surface">{user?.streak || 0}</span>
+              <span className="font-caption text-caption text-on-surface-variant">Streak</span>
+            </div>
+            <div className="bg-surface-container-lowest rounded-xl p-3 text-center">
+              <span className="material-symbols-outlined text-primary text-[24px]">bolt</span>
+              <span className="block font-headline-md text-headline-md text-on-surface">{user?.xp || 0}</span>
+              <span className="font-caption text-caption text-on-surface-variant">XP</span>
+            </div>
+            <div className="bg-surface-container-lowest rounded-xl p-3 text-center">
+              <span className="material-symbols-outlined text-tertiary text-[24px]">workspace_premium</span>
+              <span className="block font-headline-md text-headline-md text-on-surface">Lv.{user?.level || 1}</span>
+              <span className="font-caption text-caption text-on-surface-variant">Level</span>
+            </div>
+          </div>
+
           <div className="bg-surface-container-lowest rounded-xl p-lg shadow-[0_4px_12px_0px_rgba(0,0,0,0.05)] relative overflow-hidden">
             <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
             <div className="flex items-center justify-between relative z-10">
@@ -205,9 +223,9 @@ export default function Dashboard() {
               <span className="font-caption text-caption text-on-surface-variant">Daily Streak</span>
             </div>
             <div className="bg-surface-container-low rounded-xl p-md flex flex-col items-center justify-center text-center space-y-1">
-              <span className="material-symbols-outlined text-tertiary">check_circle</span>
-              <span className="font-headline-md text-headline-md text-on-surface">{user?.totalCorrect || 0}</span>
-              <span className="font-caption text-caption text-on-surface-variant">Correct Answers</span>
+              <span className="material-symbols-outlined text-tertiary">workspace_premium</span>
+              <span className="font-headline-md text-headline-md text-on-surface">Level {user?.level || 1}</span>
+              <span className="font-caption text-caption text-on-surface-variant">{user?.xp || 0} XP</span>
             </div>
           </div>
         </main>

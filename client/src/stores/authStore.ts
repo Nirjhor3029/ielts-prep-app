@@ -10,6 +10,10 @@ interface User {
   streak: number;
   totalCorrect: number;
   totalAttempts: number;
+  xp: number;
+  level: number;
+  streakFreezes: number;
+  achievements: string[];
 }
 
 interface AuthState {

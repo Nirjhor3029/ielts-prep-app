@@ -15,6 +15,7 @@ import ModuleComplete from './pages/ModuleComplete';
 import Progress from './pages/Progress';
 import Mistakes from './pages/Mistakes';
 import Profile from './pages/Profile';
+import VocabMode from './pages/VocabMode';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ChapterEditor from './pages/admin/ChapterEditor';
 
@@ -80,6 +81,7 @@ export default function App() {
         <Route path="/modules/:slug" element={<ProtectedRoute><ChapterDetail /></ProtectedRoute>} />
         <Route path="/modules/:slug/practice/:setId" element={<ProtectedRoute><PracticeMode /></ProtectedRoute>} />
         <Route path="/modules/:slug/test/:setId" element={<ProtectedRoute><TestMode /></ProtectedRoute>} />
+        <Route path="/modules/:slug/vocab" element={<ProtectedRoute><VocabMode /></ProtectedRoute>} />
         <Route path="/result/:attemptId" element={<ProtectedRoute><TestResult /></ProtectedRoute>} />
         <Route path="/module-complete" element={<ProtectedRoute><ModuleComplete /></ProtectedRoute>} />
         <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />

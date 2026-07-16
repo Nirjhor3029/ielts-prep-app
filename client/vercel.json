@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://ielts-server.vercel.app/api/$1" },
+    { "source": "/api/(.*)", "destination": "https://ielts-prep-app-server.vercel.app/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

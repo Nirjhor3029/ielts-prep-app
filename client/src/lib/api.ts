@@ -49,6 +49,9 @@ export const chaptersAPI = {
     request<{ questionSet: any; questions: any[] }>(`/chapters/${slug}/questions/${setId}?mode=${mode}`),
 
   listWithProgress: () => request<{ chapters: any[] }>('/chapters/with-progress/list'),
+
+  unlock: (id: string) =>
+    request<{ success: boolean; chapter: string; alreadyUnlocked: boolean }>(`/chapters/${id}/unlock`, { method: 'POST' }),
 };
 
 // Attempts

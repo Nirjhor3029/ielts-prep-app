@@ -112,6 +112,7 @@ export interface IAnalytics {
 
 export interface ChapterWithProgress extends IChapter {
   isLocked: boolean;
+  isManuallyUnlocked: boolean;
   lastScore?: string;
   lastAttemptDate?: string;
   completedAttempts: number;

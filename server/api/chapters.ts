@@ -3,6 +3,7 @@ import { authMiddleware } from '../middleware/auth.js';
 import { adminMiddleware } from '../middleware/admin.js';
 import { Chapter } from '../models/Chapter.js';
 import { Attempt } from '../models/Attempt.js';
+import { User } from '../models/User.js';
 
 const router = Router();
 
@@ -97,6 +98,10 @@ router.get('/with-progress/list', authMiddleware, async (req: Request, res: Resp
     const chapters = await Chapter.find({ isPublished: true }).sort({ order: 1 });
 
     const userId = req.user!.userId;
+    const user = await User.findById(userId).select('role unlockedChapters');
+    const isAdmin = user?.role === 'admin';
+    const manualUnlocks = new Set((user?.unlockedChapters || []).map((id: any) => id.toString()));
+
     const attempts = await Attempt.aggregate([
       { $match: { userId: req.user!.userId } },
       {
@@ -116,12 +121,14 @@ router.get('/with-progress/list', authMiddleware, async (req: Request, res: Resp
     const chaptersWithProgress = chapters.map((ch) => {
       const attempt = attemptMap.get(ch._id.toString());
       const isCompleted = !!attempt;
-      const isLocked = !previousCompleted;
+      const isManuallyUnlocked = manualUnlocks.has(ch._id.toString());
+      const isLocked = isAdmin ? false : isManuallyUnlocked ? false : !previousCompleted;
       previousCompleted = isCompleted;
 
       return {
         ...ch.toObject(),
         isLocked,
+        isManuallyUnlocked,
         lastScore: attempt ? `${attempt.lastScore}/${attempt.lastTotal}` : null,
         lastAttemptDate: attempt?.lastDate || null,
         completedAttempts: attempt?.count || 0,
@@ -131,6 +138,45 @@ router.get('/with-progress/list', authMiddleware, async (req: Request, res: Resp
     res.json({ chapters: chaptersWithProgress });
   } catch (error) {
     console.error('Get chapters with progress error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Unlock a chapter manually
+router.post('/:id/unlock', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+    const chapterId = req.params.id;
+
+    const chapter = await Chapter.findById(chapterId);
+    if (!chapter) {
+      res.status(404).json({ error: 'Chapter not found' });
+      return;
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    if (user.role === 'admin') {
+      res.json({ success: true, chapter: chapterId, alreadyUnlocked: true });
+      return;
+    }
+
+    const alreadyUnlocked = user.unlockedChapters.some(
+      (id: any) => id.toString() === chapterId
+    );
+
+    if (!alreadyUnlocked) {
+      user.unlockedChapters.push(chapter._id);
+      await user.save();
+    }
+
+    res.json({ success: true, chapter: chapterId, alreadyUnlocked });
+  } catch (error) {
+    console.error('Unlock chapter error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

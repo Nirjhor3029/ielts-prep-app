@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { chaptersAPI, progressAPI } from '../lib/api';
+import { useAuthStore } from '../stores/authStore';
 import type { IChapter, IUserProgress } from '../types';
 import StarRating from '../components/StarRating';
 import RadarChart from '../components/RadarChart';
+import LockModal from '../components/LockModal';
 
 type Tab = 'study' | 'practice' | 'challenge' | 'vocab' | 'progress';
 
 export default function ChapterDetail() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [chapter, setChapter] = useState<IChapter | null>(null);
   const [progress, setProgress] = useState<IUserProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>('study');
   const [cardsRead, setCardsRead] = useState<Set<string>>(new Set());
+  const [isLocked, setIsLocked] = useState(false);
+  const [lockModal, setLockModal] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -22,11 +28,18 @@ export default function ChapterDetail() {
       chaptersAPI.getBySlug(slug).then(({ chapter }) =>
         progressAPI.get(chapter._id).then(({ progress }) => progress)
       ),
+      chaptersAPI.listWithProgress(),
     ])
-      .then(([chapterData, progressData]) => {
+      .then(([chapterData, progressData, listData]) => {
         setChapter(chapterData.chapter);
         setProgress(progressData);
         setCardsRead(new Set(progressData.cardsRead || []));
+
+        const chapterInfo = listData.chapters.find((ch: any) => ch.slug === slug);
+        if (chapterInfo?.isLocked && user?.role !== 'admin') {
+          setIsLocked(true);
+          setLockModal(true);
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -316,6 +329,21 @@ export default function ChapterDetail() {
           </div>
         )}
       </main>
+
+      {lockModal && chapter && (
+        <LockModal
+          chapterId={chapter._id}
+          chapterTitle={chapter.title}
+          onClose={() => {
+            setLockModal(false);
+            navigate('/modules');
+          }}
+          onUnlocked={() => {
+            setLockModal(false);
+            setIsLocked(false);
+          }}
+        />
+      )}
     </div>
   );
 }

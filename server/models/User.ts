@@ -15,6 +15,7 @@ export interface IUserDoc extends Document {
   lastStudyDate?: Date;
   streakFreezes: number;
   achievements: string[];
+  unlockedChapters: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema<IUserDoc>({
@@ -32,6 +33,7 @@ const UserSchema = new Schema<IUserDoc>({
   lastStudyDate: { type: Date },
   streakFreezes: { type: Number, default: 0 },
   achievements: [{ type: String }],
+  unlockedChapters: [{ type: Schema.Types.ObjectId, ref: 'Chapter' }],
 }, { timestamps: true });
 
 UserSchema.index({ email: 1 }, { unique: true });

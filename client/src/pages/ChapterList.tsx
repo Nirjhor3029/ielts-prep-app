@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { chaptersAPI } from '../lib/api';
+import { useAuthStore } from '../stores/authStore';
 import Layout from '../components/Layout';
+import LockModal from '../components/LockModal';
 
 export default function ChapterList() {
+  const { user } = useAuthStore();
   const [chapters, setChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lockModal, setLockModal] = useState<{ chapterId: string; chapterTitle: string; previousTitle?: string } | null>(null);
 
   useEffect(() => {
     chaptersAPI.listWithProgress()
@@ -88,17 +92,32 @@ export default function ChapterList() {
           </div>
 
           <div className="flex flex-col md:grid md:grid-cols-2 gap-md">
-            {chapters.map((chapter) => {
+            {chapters.map((chapter, index) => {
               const progressPercent = chapter.completedAttempts > 0
                 ? Math.min(100, Math.round((chapter.completedAttempts / 3) * 100))
                 : 0;
 
+              const handleClick = (e: React.MouseEvent) => {
+                if (chapter.isLocked && user?.role !== 'admin') {
+                  e.preventDefault();
+                  const prevChapter = index > 0 ? chapters[index - 1] : null;
+                  setLockModal({
+                    chapterId: chapter._id,
+                    chapterTitle: chapter.title,
+                    previousTitle: prevChapter?.title,
+                  });
+                }
+              };
+
               return (
                 <Link
                   key={chapter._id}
-                  to={chapter.isLocked ? '#' : `/modules/${chapter.slug}`}
+                  to={`/modules/${chapter.slug}`}
+                  onClick={handleClick}
                   className={`chapter-card bg-surface-container-lowest rounded-xl p-5 flex items-center gap-4 ${
-                    chapter.isLocked ? 'opacity-50 pointer-events-none' : 'cursor-pointer'
+                    chapter.isLocked && user?.role !== 'admin'
+                      ? 'ring-2 ring-outline-variant/30 cursor-pointer'
+                      : 'cursor-pointer'
                   }`}
                 >
                   <div className="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
@@ -107,10 +126,12 @@ export default function ChapterList() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h4 className="font-body-md text-body-md font-bold text-on-surface">{chapter.title}</h4>
-                      {chapter.isLocked && <span className="material-symbols-outlined text-on-surface-variant text-[16px]">lock</span>}
+                      {chapter.isLocked && user?.role !== 'admin' && (
+                        <span className="material-symbols-outlined text-on-surface-variant text-[16px]">lock</span>
+                      )}
                     </div>
                     <p className="font-caption text-caption text-on-surface-variant">
-                      {chapter.lastScore ? `Last score: ${chapter.lastScore}` : chapter.isLocked ? 'Complete previous chapter first' : 'Not started'}
+                      {chapter.lastScore ? `Last score: ${chapter.lastScore}` : chapter.isLocked && user?.role !== 'admin' ? 'Tap to unlock' : 'Not started'}
                     </p>
                   </div>
                   <div className="relative w-12 h-12">
@@ -127,7 +148,11 @@ export default function ChapterList() {
                       />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-[10px] font-bold text-primary">{progressPercent}%</span>
+                      {chapter.isLocked && user?.role !== 'admin' ? (
+                        <span className="material-symbols-outlined text-on-surface-variant/40" style={{ fontSize: '16px' }}>lock_open</span>
+                      ) : (
+                        <span className="text-[10px] font-bold text-primary">{progressPercent}%</span>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -148,6 +173,21 @@ export default function ChapterList() {
           </div>
         </main>
       </div>
+
+      {lockModal && (
+        <LockModal
+          chapterId={lockModal.chapterId}
+          chapterTitle={lockModal.chapterTitle}
+          previousChapterTitle={lockModal.previousTitle}
+          onClose={() => setLockModal(null)}
+          onUnlocked={() => {
+            setLockModal(null);
+            chaptersAPI.listWithProgress()
+              .then((data) => setChapters(data.chapters))
+              .catch(console.error);
+          }}
+        />
+      )}
     </Layout>
   );
 }

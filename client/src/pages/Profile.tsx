@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-import { useThemeStore } from '../stores/themeStore';
 import Layout from '../components/Layout';
 
 export default function Profile() {
   const { user, logout } = useAuthStore();
-  const { mode, toggle } = useThemeStore();
 
   return (
     <Layout active="profile">
@@ -60,19 +58,6 @@ export default function Profile() {
               <span className="font-label-md text-label-md text-on-surface flex-1">View Progress</span>
               <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
             </Link>
-
-            <button
-              onClick={toggle}
-              className="w-full bg-surface-container-lowest rounded-xl p-md flex items-center gap-4 shadow-[0_4px_12px_0px_rgba(0,0,0,0.05)] hover:bg-surface-container-low transition-colors"
-            >
-              <span className="material-symbols-outlined text-primary">{mode === 'dark' ? 'light_mode' : 'dark_mode'}</span>
-              <span className="font-label-md text-label-md text-on-surface flex-1 text-left">
-                {mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
-              </span>
-              <div className={`w-10 h-6 rounded-full transition-colors ${mode === 'dark' ? 'bg-primary' : 'bg-surface-container-high'}`}>
-                <div className={`w-5 h-5 rounded-full bg-white shadow-sm mt-0.5 transition-transform ${mode === 'dark' ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
-              </div>
-            </button>
 
             <button
               onClick={logout}

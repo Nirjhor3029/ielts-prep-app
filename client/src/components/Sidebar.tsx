@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useThemeStore } from '../stores/themeStore';
 
 interface SidebarProps {
   active?: 'home' | 'modules' | 'progress' | 'profile';
 }
 
 export default function Sidebar({ active = 'home' }: SidebarProps) {
+  const { mode, toggle } = useThemeStore();
   const items = [
     { key: 'home' as const, icon: 'home', label: 'Home', to: '/' },
     { key: 'modules' as const, icon: 'menu_book', label: 'Modules', to: '/modules' },
@@ -45,6 +47,16 @@ export default function Sidebar({ active = 'home' }: SidebarProps) {
           );
         })}
       </nav>
+
+      <div className="px-3 pb-2 space-y-1">
+        <button
+          onClick={toggle}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-all duration-200"
+        >
+          <span className="material-symbols-outlined text-[22px]">{mode === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+          <span className="font-body-md text-body-md">{mode === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+        </button>
+      </div>
 
       <div className="px-6 py-5 border-t border-outline-variant">
         <p className="font-caption text-caption text-on-surface-variant">IELTS Prep App v1.0</p>

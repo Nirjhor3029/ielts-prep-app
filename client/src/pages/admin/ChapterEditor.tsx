@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { chaptersAPI, adminAPI } from '../../lib/api';
+import { useThemeStore } from '../../stores/themeStore';
 
 interface QuestionForm {
   type: string;
@@ -50,6 +51,7 @@ export default function ChapterEditor() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(!!id);
   const [saving, setSaving] = useState(false);
+  const { mode, toggle } = useThemeStore();
   const [form, setForm] = useState<ChapterForm>({
     title: '',
     module: 'grammar',
@@ -167,17 +169,25 @@ export default function ChapterEditor() {
           <Link to="/admin" className="active:scale-95 transition-transform text-on-surface-variant hover:opacity-80">
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
-          <h1 className="font-headline-md text-headline-md font-bold">
+          <h1 className="font-headline-md text-headline-md font-bold text-on-surface">
             {id ? 'Edit Chapter' : 'New Chapter'}
           </h1>
         </div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="bg-primary text-on-primary px-4 py-2 rounded-xl font-label-md text-label-md font-bold active:scale-95 transition-transform disabled:opacity-50"
-        >
-          {saving ? 'Saving...' : 'Save'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggle}
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors"
+          >
+            <span className="material-symbols-outlined text-on-surface-variant">{mode === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-primary text-on-primary px-4 py-2 rounded-xl font-label-md text-label-md font-bold active:scale-95 transition-transform disabled:opacity-50"
+          >
+            {saving ? 'Saving...' : 'Save'}
+          </button>
+        </div>
       </header>
 
       <main className="pt-20 px-container-padding max-w-[768px] mx-auto space-y-xl">

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useThemeStore } from '../stores/themeStore';
 
 interface BottomNavProps {
   active?: 'home' | 'modules' | 'progress' | 'profile';
 }
 
 export default function BottomNav({ active = 'home' }: BottomNavProps) {
+  const { mode, toggle } = useThemeStore();
   const items = [
     { key: 'home' as const, icon: 'home', label: 'Home', to: '/' },
     { key: 'modules' as const, icon: 'menu_book', label: 'Modules', to: '/modules' },
@@ -13,14 +15,14 @@ export default function BottomNav({ active = 'home' }: BottomNavProps) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[768px] h-20 flex justify-around items-center px-4 bg-surface-container-lowest z-50 rounded-t-xl shadow-[0_-4px_12px_0px_rgba(0,0,0,0.05)] md:hidden">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[768px] h-20 flex justify-around items-center px-2 bg-surface-container-lowest z-50 rounded-t-xl shadow-[0_-4px_12px_0px_rgba(0,0,0,0.05)] md:hidden">
       {items.map((item) => {
         const isActive = item.key === active;
         return (
           <Link
             key={item.key}
             to={item.to}
-            className={`flex flex-col items-center justify-center px-4 py-1 transition-all active:scale-90 duration-200 ${
+            className={`flex flex-col items-center justify-center px-3 py-1 transition-all active:scale-90 duration-200 ${
               isActive
                 ? 'bg-primary-container text-on-primary-container rounded-full'
                 : 'text-on-surface-variant hover:bg-surface-container-high'
@@ -36,6 +38,13 @@ export default function BottomNav({ active = 'home' }: BottomNavProps) {
           </Link>
         );
       })}
+      <button
+        onClick={toggle}
+        className="flex flex-col items-center justify-center px-3 py-1 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all active:scale-90 duration-200"
+      >
+        <span className="material-symbols-outlined">{mode === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+        <span className="font-label-md text-label-md">{mode === 'dark' ? 'Light' : 'Dark'}</span>
+      </button>
     </nav>
   );
 }

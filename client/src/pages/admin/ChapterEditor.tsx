@@ -187,7 +187,7 @@ export default function ChapterEditor() {
             <input
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none"
+              className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
               placeholder="Chapter title"
             />
           </div>
@@ -199,7 +199,7 @@ export default function ChapterEditor() {
                 type="number"
                 value={form.order}
                 onChange={(e) => setForm({ ...form, order: parseInt(e.target.value) || 0 })}
-                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
               />
             </div>
             <div>
@@ -208,7 +208,7 @@ export default function ChapterEditor() {
                 type="number"
                 value={form.readTimeMinutes}
                 onChange={(e) => setForm({ ...form, readTimeMinutes: parseInt(e.target.value) || 10 })}
-                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
               />
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function ChapterEditor() {
               <select
                 value={form.difficulty}
                 onChange={(e) => setForm({ ...form, difficulty: e.target.value })}
-                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
               >
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
@@ -231,7 +231,7 @@ export default function ChapterEditor() {
               <input
                 value={form.icon}
                 onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
                 placeholder="menu_book"
               />
             </div>
@@ -242,8 +242,8 @@ export default function ChapterEditor() {
             <input
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none"
-              placeholder="One line description"
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
+                placeholder="One line description"
             />
           </div>
 
@@ -252,7 +252,7 @@ export default function ChapterEditor() {
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full h-64 px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md focus:border-primary focus:border-2 focus:outline-none resize-y"
+              className="w-full h-64 px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none resize-y"
               placeholder="Write study notes in HTML..."
             />
           </div>
@@ -281,7 +281,7 @@ export default function ChapterEditor() {
                     newSets[setIndex] = { ...newSets[setIndex], type: e.target.value };
                     setForm({ ...form, questionSets: newSets });
                   }}
-                  className="px-3 py-1 rounded-lg border border-outline-variant text-label-md"
+                  className="px-3 py-1 rounded-lg border border-outline-variant bg-surface-container-lowest text-label-md text-on-surface"
                 >
                   <option value="practice">Practice</option>
                   <option value="test">Test</option>
@@ -295,7 +295,7 @@ export default function ChapterEditor() {
                   newSets[setIndex] = { ...newSets[setIndex], title: e.target.value };
                   setForm({ ...form, questionSets: newSets });
                 }}
-                className="w-full h-10 px-4 rounded-lg border border-outline-variant bg-surface-container-low text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                className="w-full h-10 px-4 rounded-lg border border-outline-variant bg-surface-container-low text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
                 placeholder="Set title (e.g., Present Simple - Practice 1)"
               />
 
@@ -307,7 +307,7 @@ export default function ChapterEditor() {
                       <select
                         value={q.type}
                         onChange={(e) => updateQuestion(setIndex, qIndex, 'type', e.target.value)}
-                        className="px-2 py-1 rounded border border-outline-variant text-caption"
+                        className="px-2 py-1 rounded border border-outline-variant bg-surface-container-lowest text-caption text-on-surface"
                       >
                         <option value="mcq">MCQ</option>
                         <option value="fill-blank">Fill Blank</option>
@@ -319,7 +319,7 @@ export default function ChapterEditor() {
                     <input
                       value={q.prompt}
                       onChange={(e) => updateQuestion(setIndex, qIndex, 'prompt', e.target.value)}
-                      className="w-full h-10 px-3 rounded-lg border border-outline-variant bg-white text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
+                      className="w-full h-10 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
                       placeholder="Question prompt"
                     />
 
@@ -330,7 +330,7 @@ export default function ChapterEditor() {
                             key={optIndex}
                             value={opt}
                             onChange={(e) => updateOption(setIndex, qIndex, optIndex, e.target.value)}
-                            className="h-9 px-3 rounded-lg border border-outline-variant bg-white text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
+                            className="h-9 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
                             placeholder={`Option ${String.fromCharCode(65 + optIndex)}`}
                           />
                         ))}
@@ -340,14 +340,14 @@ export default function ChapterEditor() {
                     <input
                       value={q.correctAnswer}
                       onChange={(e) => updateQuestion(setIndex, qIndex, 'correctAnswer', e.target.value)}
-                      className="w-full h-9 px-3 rounded-lg border border-outline-variant bg-white text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
+                      className="w-full h-9 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
                       placeholder="Correct answer"
                     />
 
                     <input
                       value={q.justification}
                       onChange={(e) => updateQuestion(setIndex, qIndex, 'justification', e.target.value)}
-                      className="w-full h-9 px-3 rounded-lg border border-outline-variant bg-white text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
+                      className="w-full h-9 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md text-sm focus:border-primary focus:border-2 focus:outline-none"
                       placeholder="Justification (explanation)"
                     />
                   </div>

@@ -146,6 +146,19 @@ body {
   --color-on-tertiary-container: #ffdbce;
 }
 
+.dark input,
+.dark select,
+.dark textarea,
+.dark option {
+  color: var(--color-on-surface);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--color-on-surface-variant);
+  opacity: 0.6;
+}
+
 .custom-scroll::-webkit-scrollbar {
   display: none;
 }

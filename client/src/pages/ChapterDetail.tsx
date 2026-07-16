@@ -136,7 +136,7 @@ export default function ChapterDetail() {
             </div>
 
             <article
-              className="font-body-md text-body-md text-on-surface-variant leading-relaxed"
+              className="notes-content font-body-md text-body-md text-on-surface-variant leading-relaxed"
               dangerouslySetInnerHTML={{ __html: chapter.notes }}
             />
 

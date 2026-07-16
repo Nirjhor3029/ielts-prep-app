@@ -52,6 +52,8 @@ export default function ChapterEditor() {
   const [loading, setLoading] = useState(!!id);
   const [saving, setSaving] = useState(false);
   const { mode, toggle } = useThemeStore();
+  const [showCheatSheet, setShowCheatSheet] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [form, setForm] = useState<ChapterForm>({
     title: '',
     module: 'grammar',
@@ -154,6 +156,61 @@ export default function ChapterEditor() {
     setForm({ ...form, questionSets: newSets });
   };
 
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const copyTemplate = (id: string, code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  const templates = [
+    {
+      id: 'sub-topic-card',
+      label: 'Sub-topic Card',
+      code: `<div class="sub-topic-card" data-topic="noun">\n  <div class="flex items-center gap-3 mb-4">\n    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">\n      <span class="material-symbols-outlined text-primary">bookmark</span>\n    </div>\n    <h3 class="font-headline-md text-headline-md text-on-surface">1. Noun</h3>\n  </div>\n  <p class="font-body-lg text-body-lg text-on-surface mb-4">Description here.</p>\n</div>`,
+    },
+    {
+      id: 'tip-callout',
+      label: 'Tip Callout',
+      code: `<div class="bg-secondary-container/30 border-l-4 border-secondary p-4 rounded-r-lg mb-4">\n  <p class="font-label-md text-on-secondary-container font-semibold">IELTS Tip</p>\n  <p class="font-body-md text-on-surface-variant mt-1">Tip content here.</p>\n</div>`,
+    },
+    {
+      id: 'mistake-callout',
+      label: 'Mistake Callout',
+      code: `<div class="bg-error-container/20 border-l-4 border-error p-4 rounded-r-lg mb-4">\n  <p class="font-label-md text-on-error-container font-semibold">Common Mistake</p>\n  <p class="font-body-md text-on-surface-variant mt-1">Mistake content here.</p>\n</div>`,
+    },
+    {
+      id: 'grid-2col',
+      label: '2-Column Grid',
+      code: `<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">\n  <div class="bg-surface-container-low rounded-lg p-3">\n    <p class="font-label-md text-primary font-semibold">Label</p>\n    <p class="font-caption text-on-surface-variant">Description</p>\n  </div>\n  <div class="bg-surface-container-low rounded-lg p-3">\n    <p class="font-label-md text-primary font-semibold">Label</p>\n    <p class="font-caption text-on-surface-variant">Description</p>\n  </div>\n</div>`,
+    },
+    {
+      id: 'chips',
+      label: 'Chips / Tags',
+      code: `<div class="flex flex-wrap gap-2 mb-4">\n  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-md">Word 1</span>\n  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-md">Word 2</span>\n  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-md">Word 3</span>\n</div>`,
+    },
+    {
+      id: 'examples-list',
+      label: 'Examples List',
+      code: `<h4 class="font-label-md text-on-surface font-semibold mb-2">Examples</h4>\n<ul class="space-y-2 mb-4">\n  <li class="font-body-md text-on-surface-variant"><span class="text-primary font-semibold">keyword</span> example text here.</li>\n  <li class="font-body-md text-on-surface-variant"><span class="text-primary font-semibold">keyword</span> example text here.</li>\n</ul>`,
+    },
+    {
+      id: 'intro-callout',
+      label: 'Intro Callout',
+      code: `<div class="lesson-intro">\n  <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-lg mb-6">\n    <p class="font-label-md text-primary font-semibold">Title</p>\n    <p class="font-body-md text-on-surface-variant mt-1">Content here.</p>\n  </div>\n</div>`,
+    },
+    {
+      id: 'summary-grid',
+      label: 'Summary Grid',
+      code: `<div class="lesson-summary mt-8">\n  <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Summary</h3>\n  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">\n    <div class="bg-primary-fixed/20 rounded-lg p-3 text-center">\n      <span class="material-symbols-outlined text-primary">icon_name</span>\n      <p class="font-label-md text-on-surface mt-1">Label</p>\n    </div>\n  </div>\n</div>`,
+    },
+  ];
+
+  const materialIcons = ['bookmark', 'person', 'bolt', 'palette', 'speed', 'link', 'account_tree', 'emoji_emotions'];
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -194,7 +251,7 @@ export default function ChapterEditor() {
         {/* Editor Panel */}
         <main className="flex-[3] min-w-0 px-container-padding space-y-xl pb-8">
           <div className="space-y-4">
-            <div>
+            <div id="editor-title">
               <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Title</label>
               <input
                 value={form.title}
@@ -249,7 +306,7 @@ export default function ChapterEditor() {
               </div>
             </div>
 
-            <div>
+            <div id="editor-description">
               <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Description</label>
               <input
                 value={form.description}
@@ -259,7 +316,7 @@ export default function ChapterEditor() {
               />
             </div>
 
-            <div>
+            <div id="editor-notes">
               <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Study Notes (HTML)</label>
               <textarea
                 value={form.notes}
@@ -267,10 +324,63 @@ export default function ChapterEditor() {
                 className="w-full h-64 px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none resize-y"
                 placeholder="Write study notes in HTML..."
               />
+
+              <button
+                onClick={() => setShowCheatSheet(!showCheatSheet)}
+                className="w-full mt-2 flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/50 hover:bg-surface-container transition-colors"
+              >
+                <span className="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[18px]">content_paste</span>
+                  CSS Cheat Sheet
+                </span>
+                <span className="material-symbols-outlined text-on-surface-variant text-[20px] transition-transform" style={{ transform: showCheatSheet ? 'rotate(180deg)' : 'rotate(0deg)' }}>expand_more</span>
+              </button>
+
+              {showCheatSheet && (
+                <div className="mt-2 bg-surface-container-low rounded-xl border border-outline-variant/50 overflow-hidden">
+                  <div className="p-4 space-y-4">
+                    <div>
+                      <p className="font-label-md text-on-surface-variant mb-2 font-semibold">Templates (click to copy)</p>
+                      <div className="space-y-1.5">
+                        {templates.map((t) => (
+                          <button
+                            key={t.id}
+                            onClick={() => copyTemplate(t.id, t.code)}
+                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container transition-all text-left"
+                          >
+                            <span className="font-body-md text-body-md text-on-surface">{t.label}</span>
+                            <span className="font-caption text-caption text-primary font-semibold">
+                              {copiedId === t.id ? '✓ Copied!' : '📋 Copy'}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <hr className="border-outline-variant/50" />
+
+                    <div>
+                      <p className="font-label-md text-on-surface-variant mb-2 font-semibold">Material Icons</p>
+                      <div className="flex flex-wrap gap-2">
+                        {materialIcons.map((icon) => (
+                          <button
+                            key={icon}
+                            onClick={() => copyTemplate(`icon-${icon}`, `<span class="material-symbols-outlined">${icon}</span>`)}
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 transition-all"
+                          >
+                            <span className="material-symbols-outlined text-[16px] text-primary">{icon}</span>
+                            <span className="font-caption text-caption text-on-surface-variant">{icon}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div id="editor-questions" className="space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="font-headline-md text-headline-md text-on-surface">Question Sets</h3>
               <button
@@ -387,14 +497,14 @@ export default function ChapterEditor() {
 
               <div className="p-5 space-y-4">
                 {form.title && (
-                  <div className="flex items-center gap-2">
+                  <div onClick={() => scrollTo('editor-title')} className="flex items-center gap-2 cursor-pointer rounded-lg p-1 -m-1 hover:bg-surface-container-low transition-colors">
                     <span className="material-symbols-outlined text-primary">{form.icon || 'menu_book'}</span>
                     <h2 className="font-headline-md text-headline-md font-bold text-on-surface">{form.title}</h2>
                   </div>
                 )}
 
                 {form.description && (
-                  <p className="font-body-md text-on-surface-variant">{form.description}</p>
+                  <p onClick={() => scrollTo('editor-description')} className="font-body-md text-on-surface-variant cursor-pointer rounded-lg p-1 -m-1 hover:bg-surface-container-low transition-colors">{form.description}</p>
                 )}
 
                 {form.title && (
@@ -411,10 +521,12 @@ export default function ChapterEditor() {
                 {form.title && <hr className="border-outline-variant/50" />}
 
                 {form.notes ? (
-                  <article
-                    className="preview-notes font-body-md text-body-md text-on-surface-variant leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: form.notes }}
-                  />
+                  <div onClick={() => scrollTo('editor-notes')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
+                    <article
+                      className="notes-content preview-notes font-body-md text-body-md text-on-surface-variant leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: form.notes }}
+                    />
+                  </div>
                 ) : form.title ? (
                   <div className="text-center py-8">
                     <span className="material-symbols-outlined text-on-surface-variant/30" style={{ fontSize: '48px' }}>article</span>
@@ -428,9 +540,9 @@ export default function ChapterEditor() {
                 )}
 
                 {form.questionSets.length > 0 && form.questionSets.some(qs => qs.title || qs.questions.length > 0) && (
-                  <>
+                  <div onClick={() => scrollTo('editor-questions')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
                     <hr className="border-outline-variant/50" />
-                    <div className="space-y-3">
+                    <div className="space-y-3 pt-3">
                       <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Question Sets</span>
                       {form.questionSets.map((qs, i) => (
                         <div key={i} className="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">
@@ -442,7 +554,7 @@ export default function ChapterEditor() {
                         </div>
                       ))}
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

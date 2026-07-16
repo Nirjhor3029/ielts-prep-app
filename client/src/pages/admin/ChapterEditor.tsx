@@ -28,6 +28,8 @@ interface VocabForm {
 interface ChapterForm {
   title: string;
   module: string;
+  phaseTitle: string;
+  chapterGroup: string;
   moduleTitle: string;
   order: number;
   description: string;
@@ -74,6 +76,8 @@ export default function ChapterEditor() {
   const [form, setForm] = useState<ChapterForm>({
     title: '',
     module: 'grammar',
+    phaseTitle: '',
+    chapterGroup: '',
     moduleTitle: '',
     order: 1,
     description: '',
@@ -95,6 +99,8 @@ export default function ChapterEditor() {
           setForm({
             title: chapter.title,
             module: chapter.module,
+            phaseTitle: chapter.phaseTitle || '',
+            chapterGroup: chapter.chapterGroup || '',
             moduleTitle: chapter.moduleTitle || '',
             order: chapter.order,
             description: chapter.description,
@@ -318,6 +324,26 @@ export default function ChapterEditor() {
                 onChange={(e) => setForm({ ...form, moduleTitle: e.target.value })}
                 className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
                 placeholder="e.g. Module 1: Understanding Tense"
+              />
+            </div>
+
+            <div id="editor-phase-title">
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Phase Title <span className="text-on-surface-variant/50">(optional — groups into learning phases)</span></label>
+              <input
+                value={form.phaseTitle}
+                onChange={(e) => setForm({ ...form, phaseTitle: e.target.value })}
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
+                placeholder="e.g. Phase 1: Grammar Foundations"
+              />
+            </div>
+
+            <div id="editor-chapter-group">
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Chapter Group <span className="text-on-surface-variant/50">(optional — groups lessons under a parent chapter)</span></label>
+              <input
+                value={form.chapterGroup}
+                onChange={(e) => setForm({ ...form, chapterGroup: e.target.value })}
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
+                placeholder="e.g. Tenses Masterclass (leave empty for standalone chapters)"
               />
             </div>
 

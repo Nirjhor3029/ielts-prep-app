@@ -6,4 +6,4 @@ dist/
 Thumbs.db
 
 # Seed files (ignored — run locally only)
-server/seed-lesson*.ts
+server/seed-*.ts

@@ -170,41 +170,49 @@ export default function ChapterEditor() {
     {
       id: 'sub-topic-card',
       label: 'Sub-topic Card',
+      preview: `<div style="background:var(--color-surface-container-lowest);border:1px solid var(--color-outline-variant);border-radius:1rem;padding:1.5rem;margin-bottom:1rem"><div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem"><div style="width:2.5rem;height:2.5rem;background:color-mix(in srgb,var(--color-primary) 10%,transparent);border-radius:0.5rem;display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined" style="color:var(--color-primary);font-size:20px">bookmark</span></div><h3 style="font-size:1.25rem;font-weight:700;color:var(--color-on-surface);margin:0">1. Noun</h3></div><p style="color:var(--color-on-surface-variant);margin:0;font-size:0.95rem">A noun names someone or something.</p></div>`,
       code: `<div class="sub-topic-card" data-topic="noun">\n  <div class="flex items-center gap-3 mb-4">\n    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">\n      <span class="material-symbols-outlined text-primary">bookmark</span>\n    </div>\n    <h3 class="font-headline-md text-headline-md text-on-surface">1. Noun</h3>\n  </div>\n  <p class="font-body-lg text-body-lg text-on-surface mb-4">Description here.</p>\n</div>`,
     },
     {
       id: 'tip-callout',
       label: 'Tip Callout',
+      preview: `<div style="background:color-mix(in srgb,var(--color-secondary-container) 30%,transparent);border-left:4px solid var(--color-secondary);padding:1rem 1.25rem;border-radius:0 0.5rem 0.5rem 0"><p style="font-weight:600;color:var(--color-on-secondary-container);font-size:0.875rem;margin:0 0 0.25rem">IELTS Tip</p><p style="color:var(--color-on-surface-variant);margin:0;font-size:0.95rem">Learn these words — they appear very often.</p></div>`,
       code: `<div class="bg-secondary-container/30 border-l-4 border-secondary p-4 rounded-r-lg mb-4">\n  <p class="font-label-md text-on-secondary-container font-semibold">IELTS Tip</p>\n  <p class="font-body-md text-on-surface-variant mt-1">Tip content here.</p>\n</div>`,
     },
     {
       id: 'mistake-callout',
       label: 'Mistake Callout',
+      preview: `<div style="background:color-mix(in srgb,var(--color-error-container) 20%,transparent);border-left:4px solid var(--color-error);padding:1rem 1.25rem;border-radius:0 0.5rem 0.5rem 0"><p style="font-weight:600;color:var(--color-on-error-container);font-size:0.875rem;margin:0 0 0.25rem">Common Mistake</p><p style="color:var(--color-on-surface-variant);margin:0;font-size:0.95rem"><span style="text-decoration:line-through;color:var(--color-error)">Wrong sentence.</span> → <span style="font-weight:600;color:var(--color-primary)">Correct sentence.</span></p></div>`,
       code: `<div class="bg-error-container/20 border-l-4 border-error p-4 rounded-r-lg mb-4">\n  <p class="font-label-md text-on-error-container font-semibold">Common Mistake</p>\n  <p class="font-body-md text-on-surface-variant mt-1">Mistake content here.</p>\n</div>`,
     },
     {
       id: 'grid-2col',
       label: '2-Column Grid',
+      preview: `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem"><div style="background:var(--color-surface-container-low);border-radius:0.5rem;padding:0.75rem"><p style="font-weight:600;color:var(--color-primary);font-size:0.875rem;margin:0 0 0.125rem">Common Noun</p><p style="font-size:0.75rem;color:var(--color-on-surface-variant);margin:0">city, dog, teacher</p></div><div style="background:var(--color-surface-container-low);border-radius:0.5rem;padding:0.75rem"><p style="font-weight:600;color:var(--color-primary);font-size:0.875rem;margin:0 0 0.125rem">Proper Noun</p><p style="font-size:0.75rem;color:var(--color-on-surface-variant);margin:0">Dhaka, IELTS, London</p></div></div>`,
       code: `<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">\n  <div class="bg-surface-container-low rounded-lg p-3">\n    <p class="font-label-md text-primary font-semibold">Label</p>\n    <p class="font-caption text-on-surface-variant">Description</p>\n  </div>\n  <div class="bg-surface-container-low rounded-lg p-3">\n    <p class="font-label-md text-primary font-semibold">Label</p>\n    <p class="font-caption text-on-surface-variant">Description</p>\n  </div>\n</div>`,
     },
     {
       id: 'chips',
       label: 'Chips / Tags',
+      preview: `<div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem"><span style="background:color-mix(in srgb,var(--color-primary) 10%,transparent);color:var(--color-primary);padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:500">I</span><span style="background:color-mix(in srgb,var(--color-primary) 10%,transparent);color:var(--color-primary);padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:500">you</span><span style="background:color-mix(in srgb,var(--color-primary) 10%,transparent);color:var(--color-primary);padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:500">he</span><span style="background:color-mix(in srgb,var(--color-primary) 10%,transparent);color:var(--color-primary);padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:500">she</span></div>`,
       code: `<div class="flex flex-wrap gap-2 mb-4">\n  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-md">Word 1</span>\n  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-md">Word 2</span>\n  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-md">Word 3</span>\n</div>`,
     },
     {
       id: 'examples-list',
       label: 'Examples List',
+      preview: `<div><p style="font-weight:600;font-size:0.875rem;color:var(--color-on-surface);margin:0 0 0.5rem;text-transform:uppercase;letter-spacing:0.025em">Examples</p><ul style="list-style:none;padding:0;margin:0"><li style="padding:0.375rem 0 0.375rem 1.25rem;position:relative;line-height:1.6;font-size:0.95rem;color:var(--color-on-surface-variant)"><span style="position:absolute;left:0;top:0.75rem;width:6px;height:6px;border-radius:50%;background:var(--color-primary)"></span><span style="font-weight:600;color:var(--color-primary)">Ali</span> is a student.</li><li style="padding:0.375rem 0 0.375rem 1.25rem;position:relative;line-height:1.6;font-size:0.95rem;color:var(--color-on-surface-variant)"><span style="position:absolute;left:0;top:0.75rem;width:6px;height:6px;border-radius:50%;background:var(--color-primary)"></span><span style="font-weight:600;color:var(--color-primary)">Dhaka</span> is a city.</li></ul></div>`,
       code: `<h4 class="font-label-md text-on-surface font-semibold mb-2">Examples</h4>\n<ul class="space-y-2 mb-4">\n  <li class="font-body-md text-on-surface-variant"><span class="text-primary font-semibold">keyword</span> example text here.</li>\n  <li class="font-body-md text-on-surface-variant"><span class="text-primary font-semibold">keyword</span> example text here.</li>\n</ul>`,
     },
     {
       id: 'intro-callout',
       label: 'Intro Callout',
+      preview: `<div style="background:color-mix(in srgb,var(--color-primary) 5%,transparent);border-left:4px solid var(--color-primary);padding:1rem 1.25rem;border-radius:0 0.5rem 0.5rem 0;margin-bottom:1rem"><p style="font-weight:600;color:var(--color-primary);font-size:0.875rem;margin:0 0 0.25rem">How We Learn</p><p style="color:var(--color-on-surface-variant);margin:0;font-size:0.95rem">Everything is in English. Don't worry if you don't understand everything at first.</p></div>`,
       code: `<div class="lesson-intro">\n  <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-lg mb-6">\n    <p class="font-label-md text-primary font-semibold">Title</p>\n    <p class="font-body-md text-on-surface-variant mt-1">Content here.</p>\n  </div>\n</div>`,
     },
     {
       id: 'summary-grid',
       label: 'Summary Grid',
+      preview: `<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--color-outline-variant)"><p style="font-size:1.25rem;font-weight:700;color:var(--color-on-surface);margin:0 0 0.75rem">What You've Learned</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem"><div style="background:color-mix(in srgb,var(--color-primary-fixed) 20%,transparent);border-radius:0.5rem;padding:0.5rem;text-align:center"><span class="material-symbols-outlined" style="color:var(--color-primary);font-size:20px">bookmark</span><p style="font-weight:500;color:var(--color-on-surface);margin:0.125rem 0 0;font-size:0.75rem">Noun</p></div><div style="background:color-mix(in srgb,var(--color-primary-fixed) 20%,transparent);border-radius:0.5rem;padding:0.5rem;text-align:center"><span class="material-symbols-outlined" style="color:var(--color-primary);font-size:20px">person</span><p style="font-weight:500;color:var(--color-on-surface);margin:0.125rem 0 0;font-size:0.75rem">Pronoun</p></div><div style="background:color-mix(in srgb,var(--color-primary-fixed) 20%,transparent);border-radius:0.5rem;padding:0.5rem;text-align:center"><span class="material-symbols-outlined" style="color:var(--color-primary);font-size:20px">bolt</span><p style="font-weight:500;color:var(--color-on-surface);margin:0.125rem 0 0;font-size:0.75rem">Verb</p></div><div style="background:color-mix(in srgb,var(--color-primary-fixed) 20%,transparent);border-radius:0.5rem;padding:0.5rem;text-align:center"><span class="material-symbols-outlined" style="color:var(--color-primary);font-size:20px">palette</span><p style="font-weight:500;color:var(--color-on-surface);margin:0.125rem 0 0;font-size:0.75rem">Adjective</p></div></div></div>`,
       code: `<div class="lesson-summary mt-8">\n  <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Summary</h3>\n  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">\n    <div class="bg-primary-fixed/20 rounded-lg p-3 text-center">\n      <span class="material-symbols-outlined text-primary">icon_name</span>\n      <p class="font-label-md text-on-surface mt-1">Label</p>\n    </div>\n  </div>\n</div>`,
     },
   ];
@@ -317,66 +325,22 @@ export default function ChapterEditor() {
             </div>
 
             <div id="editor-notes">
-              <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Study Notes (HTML)</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="font-label-md text-label-md text-on-surface-variant">Study Notes (HTML)</label>
+                <button
+                  onClick={() => setShowCheatSheet(true)}
+                  className="font-label-md text-label-md text-primary flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+                >
+                  <span className="material-symbols-outlined text-[16px]">content_paste</span>
+                  Cheat Sheet
+                </button>
+              </div>
               <textarea
                 value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
                 className="w-full h-64 px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none resize-y"
                 placeholder="Write study notes in HTML..."
               />
-
-              <button
-                onClick={() => setShowCheatSheet(!showCheatSheet)}
-                className="w-full mt-2 flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/50 hover:bg-surface-container transition-colors"
-              >
-                <span className="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px]">content_paste</span>
-                  CSS Cheat Sheet
-                </span>
-                <span className="material-symbols-outlined text-on-surface-variant text-[20px] transition-transform" style={{ transform: showCheatSheet ? 'rotate(180deg)' : 'rotate(0deg)' }}>expand_more</span>
-              </button>
-
-              {showCheatSheet && (
-                <div className="mt-2 bg-surface-container-low rounded-xl border border-outline-variant/50 overflow-hidden">
-                  <div className="p-4 space-y-4">
-                    <div>
-                      <p className="font-label-md text-on-surface-variant mb-2 font-semibold">Templates (click to copy)</p>
-                      <div className="space-y-1.5">
-                        {templates.map((t) => (
-                          <button
-                            key={t.id}
-                            onClick={() => copyTemplate(t.id, t.code)}
-                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container transition-all text-left"
-                          >
-                            <span className="font-body-md text-body-md text-on-surface">{t.label}</span>
-                            <span className="font-caption text-caption text-primary font-semibold">
-                              {copiedId === t.id ? '✓ Copied!' : '📋 Copy'}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <hr className="border-outline-variant/50" />
-
-                    <div>
-                      <p className="font-label-md text-on-surface-variant mb-2 font-semibold">Material Icons</p>
-                      <div className="flex flex-wrap gap-2">
-                        {materialIcons.map((icon) => (
-                          <button
-                            key={icon}
-                            onClick={() => copyTemplate(`icon-${icon}`, `<span class="material-symbols-outlined">${icon}</span>`)}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 transition-all"
-                          >
-                            <span className="material-symbols-outlined text-[16px] text-primary">{icon}</span>
-                            <span className="font-caption text-caption text-on-surface-variant">{icon}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
@@ -561,6 +525,62 @@ export default function ChapterEditor() {
           </div>
         </aside>
       </div>
+
+      {/* Cheat Sheet Drawer */}
+      {showCheatSheet && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setShowCheatSheet(false)} />
+          <div className="relative w-full max-w-[420px] bg-surface-container-lowest h-full shadow-2xl overflow-y-auto animate-slide-in-right">
+            <div className="sticky top-0 bg-surface-container-lowest border-b border-outline-variant/50 px-5 py-4 flex items-center justify-between z-10">
+              <div>
+                <h2 className="font-headline-md text-headline-md font-bold text-on-surface">Cheat Sheet</h2>
+                <p className="font-caption text-caption text-on-surface-variant">Click template to copy, then paste in editor</p>
+              </div>
+              <button
+                onClick={() => setShowCheatSheet(false)}
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors"
+              >
+                <span className="material-symbols-outlined text-on-surface-variant">close</span>
+              </button>
+            </div>
+
+            <div className="p-5 space-y-5">
+              {templates.map((t) => (
+                <div key={t.id} className="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/30">
+                  <div className="px-4 py-3 flex items-center justify-between border-b border-outline-variant/30">
+                    <span className="font-label-md text-label-md text-on-surface font-semibold">{t.label}</span>
+                    <button
+                      onClick={() => copyTemplate(t.id, t.code)}
+                      className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary font-label-md text-label-md font-semibold hover:bg-primary/20 transition-colors"
+                    >
+                      {copiedId === t.id ? '✓ Copied!' : '📋 Copy'}
+                    </button>
+                  </div>
+                  <div className="p-4 bg-surface-container">
+                    <div dangerouslySetInnerHTML={{ __html: t.preview }} />
+                  </div>
+                </div>
+              ))}
+
+              <div>
+                <p className="font-label-md text-on-surface-variant mb-3 font-semibold">Material Icons</p>
+                <div className="flex flex-wrap gap-2">
+                  {materialIcons.map((icon) => (
+                    <button
+                      key={icon}
+                      onClick={() => copyTemplate(`icon-${icon}`, `<span class="material-symbols-outlined">${icon}</span>`)}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant/30 hover:border-primary/50 transition-all"
+                    >
+                      <span className="material-symbols-outlined text-[16px] text-primary">{icon}</span>
+                      <span className="font-caption text-caption text-on-surface-variant">{icon}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

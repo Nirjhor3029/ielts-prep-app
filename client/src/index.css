@@ -502,3 +502,10 @@ body {
 .dark .notes-content .sub-topic-card .grid > div {
   background: var(--color-surface-container-low);
 }
+
+@layer utilities {
+  .perspective-1000 { perspective: 1000px; }
+  .preserve-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .rotate-y-180 { transform: rotateY(180deg); }
+}

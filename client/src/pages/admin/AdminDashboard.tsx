@@ -95,7 +95,7 @@ export default function AdminDashboard() {
                     <div>
                       <h3 className="font-label-md text-on-surface block">{chapter.title}</h3>
                       <span className="font-caption text-on-surface-variant">
-                        Order: {chapter.order} • {chapter.questionSets?.length || 0} question sets
+                        Order: {chapter.order} • {chapter.vocab?.length || 0} words • {chapter.questionSets?.length || 0} question sets
                       </span>
                     </div>
                   </div>

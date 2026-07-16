@@ -18,6 +18,13 @@ interface QuestionSetForm {
   questions: QuestionForm[];
 }
 
+interface VocabForm {
+  word: string;
+  meaning: string;
+  partOfSpeech: string;
+  example: string;
+}
+
 interface ChapterForm {
   title: string;
   module: string;
@@ -28,6 +35,7 @@ interface ChapterForm {
   notes: string;
   icon: string;
   isPublished: boolean;
+  vocab: VocabForm[];
   questionSets: QuestionSetForm[];
 }
 
@@ -44,6 +52,13 @@ const emptyQuestionSet: QuestionSetForm = {
   title: '',
   timeLimitMinutes: 10,
   questions: [{ ...emptyQuestion }],
+};
+
+const emptyVocab: VocabForm = {
+  word: '',
+  meaning: '',
+  partOfSpeech: 'noun',
+  example: '',
 };
 
 export default function ChapterEditor() {
@@ -64,6 +79,7 @@ export default function ChapterEditor() {
     notes: '',
     icon: 'menu_book',
     isPublished: false,
+    vocab: [],
     questionSets: [{ ...emptyQuestionSet }],
   });
 
@@ -83,6 +99,14 @@ export default function ChapterEditor() {
             notes: chapter.notes,
             icon: chapter.icon,
             isPublished: chapter.isPublished,
+            vocab: chapter.vocab?.length > 0
+              ? chapter.vocab.map((v: any) => ({
+                  word: v.word,
+                  meaning: v.meaning,
+                  partOfSpeech: v.partOfSpeech,
+                  example: v.example,
+                }))
+              : [],
             questionSets: chapter.questionSets?.length > 0
               ? chapter.questionSets.map((qs: any) => ({
                   type: qs.type,
@@ -154,6 +178,20 @@ export default function ChapterEditor() {
     newQuestions[qIndex] = { ...newQuestions[qIndex], options: newOptions };
     newSets[setIndex] = { ...newSets[setIndex], questions: newQuestions };
     setForm({ ...form, questionSets: newSets });
+  };
+
+  const addVocab = () => {
+    setForm({ ...form, vocab: [...form.vocab, { ...emptyVocab }] });
+  };
+
+  const updateVocab = (index: number, field: keyof VocabForm, value: string) => {
+    const newVocab = [...form.vocab];
+    newVocab[index] = { ...newVocab[index], [field]: value };
+    setForm({ ...form, vocab: newVocab });
+  };
+
+  const removeVocab = (index: number) => {
+    setForm({ ...form, vocab: form.vocab.filter((_, i) => i !== index) });
   };
 
   const scrollTo = (id: string) => {
@@ -344,6 +382,73 @@ export default function ChapterEditor() {
             </div>
           </div>
 
+          <div id="editor-vocab" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-headline-md text-headline-md text-on-surface">Vocabulary</h3>
+              <button
+                onClick={addVocab}
+                className="text-primary font-label-md text-label-md flex items-center gap-1 hover:opacity-80"
+              >
+                <span className="material-symbols-outlined text-[18px]">add</span>
+                Add Word
+              </button>
+            </div>
+
+            {form.vocab.map((v, i) => (
+              <div key={i} className="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_12px_0px_rgba(0,0,0,0.05)] space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-label-md text-on-surface-variant">Word {i + 1}</span>
+                  <button
+                    onClick={() => removeVocab(i)}
+                    className="p-1 rounded-lg hover:bg-error-container transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[18px] text-error">delete</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <input
+                    value={v.word}
+                    onChange={(e) => updateVocab(i, 'word', e.target.value)}
+                    className="h-10 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                    placeholder="Word"
+                  />
+                  <select
+                    value={v.partOfSpeech}
+                    onChange={(e) => updateVocab(i, 'partOfSpeech', e.target.value)}
+                    className="h-10 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                  >
+                    <option value="noun">Noun</option>
+                    <option value="verb">Verb</option>
+                    <option value="adjective">Adjective</option>
+                    <option value="adverb">Adverb</option>
+                    <option value="preposition">Preposition</option>
+                    <option value="conjunction">Conjunction</option>
+                    <option value="interjection">Interjection</option>
+                  </select>
+                </div>
+                <input
+                  value={v.meaning}
+                  onChange={(e) => updateVocab(i, 'meaning', e.target.value)}
+                  className="w-full h-10 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md focus:border-primary focus:border-2 focus:outline-none"
+                  placeholder="Meaning (in English)"
+                />
+                <textarea
+                  value={v.example}
+                  onChange={(e) => updateVocab(i, 'example', e.target.value)}
+                  className="w-full h-20 px-3 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-md focus:border-primary focus:border-2 focus:outline-none resize-none"
+                  placeholder="Example sentence using the word"
+                />
+              </div>
+            ))}
+
+            {form.vocab.length === 0 && (
+              <div className="text-center py-6 border border-dashed border-outline-variant rounded-xl">
+                <span className="material-symbols-outlined text-on-surface-variant/30 text-[32px]">translate</span>
+                <p className="font-body-md text-on-surface-variant/50 mt-1">No vocabulary yet</p>
+              </div>
+            )}
+          </div>
+
           <div id="editor-questions" className="space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="font-headline-md text-headline-md text-on-surface">Question Sets</h3>
@@ -483,6 +588,19 @@ export default function ChapterEditor() {
                 )}
 
                 {form.title && <hr className="border-outline-variant/50" />}
+
+                {form.vocab.length > 0 && (
+                  <div onClick={() => scrollTo('editor-vocab')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
+                    <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Vocabulary ({form.vocab.length} terms)</span>
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {form.vocab.map((v, i) => (
+                        <span key={i} className="bg-primary/10 text-primary px-2.5 py-1 rounded-full font-label-md text-label-md">
+                          {v.word || '?'}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {form.notes ? (
                   <div onClick={() => scrollTo('editor-notes')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">

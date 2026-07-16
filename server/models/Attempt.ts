@@ -16,6 +16,7 @@ export interface IAttemptDoc extends Document {
   totalQuestions: number;
   startedAt: Date;
   completedAt: Date;
+  createdAt?: Date;
 }
 
 const AttemptSchema = new Schema<IAttemptDoc>({

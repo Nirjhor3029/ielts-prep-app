@@ -26,7 +26,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     }
 
     let score = 0;
-    const processedAnswers = answers.map((ans: { questionId: string; userAnswer: string }) => {
+    const processedAnswers: { questionId: string; userAnswer: string; isCorrect: boolean }[] = answers.map((ans: { questionId: string; userAnswer: string }) => {
       const question = questionSet.questions.id(ans.questionId);
       const isCorrect = question
         ? String(question.correctAnswer).toLowerCase().trim() === String(ans.userAnswer).toLowerCase().trim()

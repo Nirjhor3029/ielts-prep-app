@@ -61,7 +61,7 @@ router.get('/:slug/questions/:setId', authMiddleware, async (req: Request, res: 
       return;
     }
 
-    const questionSet = chapter.questionSets.id(req.params.setId);
+    const questionSet = chapter.questionSets.id(req.params.setId as string);
     if (!questionSet) {
       res.status(404).json({ error: 'Question set not found' });
       return;
@@ -72,7 +72,8 @@ router.get('/:slug/questions/:setId', authMiddleware, async (req: Request, res: 
     const questions = questionSet.questions.map((q) => {
       const obj = q.toObject();
       if (mode === 'test') {
-        delete obj.correctAnswer;
+        const { correctAnswer, ...rest } = obj;
+        return rest;
       }
       return obj;
     });

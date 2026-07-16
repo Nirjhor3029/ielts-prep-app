@@ -69,6 +69,7 @@ export default function ChapterEditor() {
   const { mode, toggle } = useThemeStore();
   const [showCheatSheet, setShowCheatSheet] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [previewNotesExpanded, setPreviewNotesExpanded] = useState(true);
   const [form, setForm] = useState<ChapterForm>({
     title: '',
     module: 'grammar',
@@ -589,50 +590,123 @@ export default function ChapterEditor() {
 
                 {form.title && <hr className="border-outline-variant/50" />}
 
-                {form.vocab.length > 0 && (
-                  <div onClick={() => scrollTo('editor-vocab')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
-                    <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Vocabulary ({form.vocab.length} terms)</span>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
+                {/* Study Notes — collapsible */}
+                <div className="rounded-lg -m-1 p-1">
+                  <button
+                    onClick={() => setPreviewNotesExpanded(!previewNotesExpanded)}
+                    className="w-full flex items-center justify-between cursor-pointer hover:bg-surface-container-low rounded-lg p-1 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-[18px] text-primary">article</span>
+                      <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Study Notes</span>
+                    </div>
+                    <span className="material-symbols-outlined text-[18px] text-on-surface-variant">
+                      {previewNotesExpanded ? 'expand_less' : 'expand_more'}
+                    </span>
+                  </button>
+                  {previewNotesExpanded && (
+                    <div onClick={() => scrollTo('editor-notes')} className="cursor-pointer mt-1">
+                      {form.notes ? (
+                        <article
+                          className="notes-content preview-notes font-body-md text-body-md text-on-surface-variant leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: form.notes }}
+                        />
+                      ) : (
+                        <div className="text-center py-6">
+                          <span className="material-symbols-outlined text-on-surface-variant/30" style={{ fontSize: '36px' }}>article</span>
+                          <p className="font-body-md text-on-surface-variant/50 mt-1">No notes yet</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Vocabulary — always visible */}
+                <div onClick={() => scrollTo('editor-vocab')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="material-symbols-outlined text-[18px] text-primary">translate</span>
+                    <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">
+                      Vocabulary ({form.vocab.length} terms)
+                    </span>
+                  </div>
+                  {form.vocab.length > 0 ? (
+                    <div className="flex flex-wrap gap-1.5">
                       {form.vocab.map((v, i) => (
                         <span key={i} className="bg-primary/10 text-primary px-2.5 py-1 rounded-full font-label-md text-label-md">
                           {v.word || '?'}
                         </span>
                       ))}
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <p className="font-body-md text-on-surface-variant/40 text-sm">No vocabulary yet</p>
+                  )}
+                </div>
 
-                {form.notes ? (
-                  <div onClick={() => scrollTo('editor-notes')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
-                    <article
-                      className="notes-content preview-notes font-body-md text-body-md text-on-surface-variant leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: form.notes }}
-                    />
-                  </div>
-                ) : form.title ? (
-                  <div className="text-center py-8">
-                    <span className="material-symbols-outlined text-on-surface-variant/30" style={{ fontSize: '48px' }}>article</span>
-                    <p className="font-body-md text-on-surface-variant/50 mt-2">No notes yet</p>
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <span className="material-symbols-outlined text-on-surface-variant/20" style={{ fontSize: '64px' }}>visibility</span>
-                    <p className="font-body-md text-on-surface-variant/40 mt-3">Start typing to see preview</p>
-                  </div>
-                )}
-
+                {/* Question Sets — type-specific previews */}
                 {form.questionSets.length > 0 && form.questionSets.some(qs => qs.title || qs.questions.length > 0) && (
                   <div onClick={() => scrollTo('editor-questions')} className="cursor-pointer rounded-lg -m-1 p-1 hover:bg-surface-container-low transition-colors">
                     <hr className="border-outline-variant/50" />
                     <div className="space-y-3 pt-3">
-                      <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Question Sets</span>
-                      {form.questionSets.map((qs, i) => (
-                        <div key={i} className="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">
-                          <span className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center font-label-md text-label-md font-bold">{i + 1}</span>
-                          <div className="flex-1 min-w-0">
-                            <span className="font-label-md text-on-surface block truncate">{qs.title || `Set ${i + 1}`}</span>
-                            <span className="font-caption text-on-surface-variant">{qs.questions.length} questions • {qs.type}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[18px] text-primary">quiz</span>
+                        <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Question Sets</span>
+                      </div>
+                      {form.questionSets.map((qs, si) => (
+                        <div key={si} className="bg-surface-container-low rounded-lg overflow-hidden">
+                          <div className="flex items-center gap-3 p-3">
+                            <span className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center font-label-md text-label-md font-bold">{si + 1}</span>
+                            <div className="flex-1 min-w-0">
+                              <span className="font-label-md text-on-surface block truncate">{qs.title || `Set ${si + 1}`}</span>
+                              <span className="font-caption text-on-surface-variant">{qs.questions.length} questions • {qs.type}</span>
+                            </div>
                           </div>
+                          {qs.questions.length > 0 && (
+                            <div className="border-t border-outline-variant/30 px-3 py-2 space-y-2">
+                              {qs.questions.slice(0, 3).map((q, qi) => (
+                                <div key={qi} className="flex items-start gap-2">
+                                  <span className="font-caption text-on-surface-variant mt-0.5 shrink-0">Q{qi + 1}</span>
+                                  <div className="flex-1 min-w-0">
+                                    {q.type === 'mcq' && q.prompt && (
+                                      <div>
+                                        <p className="font-body-sm text-on-surface text-sm leading-snug line-clamp-2">{q.prompt}</p>
+                                        {q.options.some(o => o) && (
+                                          <div className="grid grid-cols-2 gap-1 mt-1">
+                                            {q.options.map((opt, oi) => (
+                                              opt && <span key={oi} className="font-caption text-[10px] text-on-surface-variant bg-surface-container-high rounded px-1.5 py-0.5 truncate">{String.fromCharCode(65 + oi)}. {opt}</span>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+                                    {q.type === 'fill-blank' && q.prompt && (
+                                      <div className="flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[14px] text-tertiary">text_fields</span>
+                                        <p className="font-body-sm text-on-surface text-sm leading-snug line-clamp-2">{q.prompt}</p>
+                                      </div>
+                                    )}
+                                    {q.type === 'error-identification' && q.prompt && (
+                                      <div className="flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[14px] text-error">search</span>
+                                        <p className="font-body-sm text-on-surface text-sm leading-snug line-clamp-2">{q.prompt}</p>
+                                      </div>
+                                    )}
+                                    {q.type === 'sentence-correction' && q.prompt && (
+                                      <div className="flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[14px] text-secondary">edit</span>
+                                        <p className="font-body-sm text-on-surface text-sm leading-snug line-clamp-2">{q.prompt}</p>
+                                      </div>
+                                    )}
+                                    {!q.prompt && (
+                                      <p className="font-body-sm text-on-surface-variant/40 text-sm italic">Empty question</p>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                              {qs.questions.length > 3 && (
+                                <p className="font-caption text-[10px] text-on-surface-variant/50 pl-6">+{qs.questions.length - 3} more</p>
+                              )}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

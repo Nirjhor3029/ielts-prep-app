@@ -25,6 +25,13 @@ app.get('/health', (_req, res) => {
 
 // Vercel serverless: export as default handler
 export default async function handler(req: Request, res: Response) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
   await connectDB();
   app(req, res);
 }

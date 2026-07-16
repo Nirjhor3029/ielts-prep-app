@@ -28,6 +28,7 @@ interface VocabForm {
 interface ChapterForm {
   title: string;
   module: string;
+  moduleTitle: string;
   order: number;
   description: string;
   readTimeMinutes: number;
@@ -73,6 +74,7 @@ export default function ChapterEditor() {
   const [form, setForm] = useState<ChapterForm>({
     title: '',
     module: 'grammar',
+    moduleTitle: '',
     order: 1,
     description: '',
     readTimeMinutes: 10,
@@ -93,6 +95,7 @@ export default function ChapterEditor() {
           setForm({
             title: chapter.title,
             module: chapter.module,
+            moduleTitle: chapter.moduleTitle || '',
             order: chapter.order,
             description: chapter.description,
             readTimeMinutes: chapter.readTimeMinutes,
@@ -305,6 +308,16 @@ export default function ChapterEditor() {
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
                 placeholder="Chapter title"
+              />
+            </div>
+
+            <div id="editor-module-title">
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-2">Module Title <span className="text-on-surface-variant/50">(optional — groups chapters)</span></label>
+              <input
+                value={form.moduleTitle}
+                onChange={(e) => setForm({ ...form, moduleTitle: e.target.value })}
+                className="w-full h-12 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface focus:border-primary focus:border-2 focus:outline-none"
+                placeholder="e.g. Module 1: Understanding Tense"
               />
             </div>
 

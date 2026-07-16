@@ -24,6 +24,7 @@ const VocabSchema = new Schema({
 
 export interface IChapterDoc extends Document {
   module: string;
+  moduleTitle: string;
   title: string;
   slug: string;
   order: number;
@@ -56,6 +57,7 @@ export interface IChapterDoc extends Document {
 
 const ChapterSchema = new Schema<IChapterDoc>({
   module: { type: String, required: true, default: 'grammar' },
+  moduleTitle: { type: String, default: '' },
   title: { type: String, required: true, trim: true },
   slug: { type: String, required: true, unique: true, lowercase: true },
   order: { type: Number, required: true, unique: true },

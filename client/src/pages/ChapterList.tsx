@@ -91,75 +91,106 @@ export default function ChapterList() {
             <span className="font-caption text-caption text-primary">{chapters.length} Chapters</span>
           </div>
 
-          <div className="flex flex-col md:grid md:grid-cols-2 gap-md">
-            {chapters.map((chapter, index) => {
-              const progressPercent = chapter.completedAttempts > 0
-                ? Math.min(100, Math.round((chapter.completedAttempts / 3) * 100))
-                : 0;
-
-              const handleClick = (e: React.MouseEvent) => {
-                if (chapter.isLocked && user?.role !== 'admin') {
-                  e.preventDefault();
-                  const prevChapter = index > 0 ? chapters[index - 1] : null;
-                  setLockModal({
-                    chapterId: chapter._id,
-                    chapterTitle: chapter.title,
-                    previousTitle: prevChapter?.title,
-                  });
+          <div className="flex flex-col gap-6">
+            {(() => {
+              const groups: { title: string; chapters: any[] }[] = [];
+              let current: { title: string; chapters: any[] } | null = null;
+              for (const ch of chapters) {
+                const groupKey = ch.moduleTitle || '';
+                if (!current || current.title !== groupKey) {
+                  current = { title: groupKey, chapters: [] };
+                  groups.push(current);
                 }
-              };
+                current.chapters.push(ch);
+              }
+              return groups.map((group, gi) => {
+                const groupCompleted = group.chapters.filter((ch) => ch.completedAttempts > 0).length;
+                return (
+                  <div key={gi} className="flex flex-col gap-3">
+                    {group.title && (
+                      <div className="flex items-center gap-3 px-1">
+                        <div className="w-1 h-6 rounded-full bg-primary" />
+                        <div className="flex-1 flex items-center justify-between">
+                          <h4 className="font-label-lg text-label-lg text-on-surface font-bold">{group.title}</h4>
+                          <span className="font-caption text-caption text-on-surface-variant">{groupCompleted}/{group.chapters.length} completed</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex flex-col md:grid md:grid-cols-2 gap-md">
+                      {group.chapters.map((chapter) => {
+                        const globalIndex = chapters.indexOf(chapter);
+                        const progressPercent = chapter.completedAttempts > 0
+                          ? Math.min(100, Math.round((chapter.completedAttempts / 3) * 100))
+                          : 0;
 
-              return (
-                <Link
-                  key={chapter._id}
-                  to={`/modules/${chapter.slug}`}
-                  onClick={handleClick}
-                  className={`chapter-card bg-surface-container-lowest rounded-xl p-5 flex items-center gap-4 ${
-                    chapter.isLocked && user?.role !== 'admin'
-                      ? 'ring-2 ring-outline-variant/30 cursor-pointer'
-                      : 'cursor-pointer'
-                  }`}
-                >
-                  <div className="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
-                    <span className="material-symbols-outlined text-primary">{chapter.icon || 'menu_book'}</span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-body-md text-body-md font-bold text-on-surface">{chapter.title}</h4>
-                      {chapter.isLocked && user?.role !== 'admin' && (
-                        <span className="material-symbols-outlined text-on-surface-variant text-[16px]">lock</span>
-                      )}
-                    </div>
-                    <p className="font-caption text-caption text-on-surface-variant">
-                      {chapter.lastScore ? `Last score: ${chapter.lastScore}` : chapter.isLocked && user?.role !== 'admin' ? 'Tap to unlock' : 'Not started'}
-                    </p>
-                  </div>
-                  <div className="relative w-12 h-12">
-                    <svg className="w-full h-full" viewBox="0 0 36 36">
-                      <circle className="text-surface-variant" cx="18" cy="18" fill="transparent" r="16" stroke="currentColor" strokeWidth="3" />
-                      <circle
-                        className="text-primary progress-ring-circle"
-                        cx="18" cy="18" fill="transparent" r="16"
-                        stroke="currentColor"
-                        strokeDasharray="100"
-                        strokeDashoffset={100 - progressPercent}
-                        strokeLinecap="round"
-                        strokeWidth="3"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {chapter.isLocked && user?.role !== 'admin' ? (
-                        <span className="material-symbols-outlined text-on-surface-variant/40" style={{ fontSize: '16px' }}>lock_open</span>
-                      ) : (
-                        <span className="text-[10px] font-bold text-primary">{progressPercent}%</span>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+                        const handleClick = (e: React.MouseEvent) => {
+                          if (chapter.isLocked && user?.role !== 'admin') {
+                            e.preventDefault();
+                            const prevChapter = globalIndex > 0 ? chapters[globalIndex - 1] : null;
+                            setLockModal({
+                              chapterId: chapter._id,
+                              chapterTitle: chapter.title,
+                              previousTitle: prevChapter?.title,
+                            });
+                          }
+                        };
 
-            <div className="mt-4 p-6 bg-secondary-container rounded-xl flex items-center gap-4 md:col-span-2">
+                        return (
+                          <Link
+                            key={chapter._id}
+                            to={`/modules/${chapter.slug}`}
+                            onClick={handleClick}
+                            className={`chapter-card bg-surface-container-lowest rounded-xl p-5 flex items-center gap-4 ${
+                              chapter.isLocked && user?.role !== 'admin'
+                                ? 'ring-2 ring-outline-variant/30 cursor-pointer'
+                                : 'cursor-pointer'
+                            }`}
+                          >
+                            <div className="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                              <span className="material-symbols-outlined text-primary">{chapter.icon || 'menu_book'}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-body-md text-body-md font-bold text-on-surface">{chapter.title}</h4>
+                                {chapter.isLocked && user?.role !== 'admin' && (
+                                  <span className="material-symbols-outlined text-on-surface-variant text-[16px]">lock</span>
+                                )}
+                              </div>
+                              <p className="font-caption text-caption text-on-surface-variant">
+                                {chapter.lastScore ? `Last score: ${chapter.lastScore}` : chapter.isLocked && user?.role !== 'admin' ? 'Tap to unlock' : 'Not started'}
+                              </p>
+                            </div>
+                            <div className="relative w-12 h-12">
+                              <svg className="w-full h-full" viewBox="0 0 36 36">
+                                <circle className="text-surface-variant" cx="18" cy="18" fill="transparent" r="16" stroke="currentColor" strokeWidth="3" />
+                                <circle
+                                  className="text-primary progress-ring-circle"
+                                  cx="18" cy="18" fill="transparent" r="16"
+                                  stroke="currentColor"
+                                  strokeDasharray="100"
+                                  strokeDashoffset={100 - progressPercent}
+                                  strokeLinecap="round"
+                                  strokeWidth="3"
+                                />
+                              </svg>
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                {chapter.isLocked && user?.role !== 'admin' ? (
+                                  <span className="material-symbols-outlined text-on-surface-variant/40" style={{ fontSize: '16px' }}>lock_open</span>
+                                ) : (
+                                  <span className="text-[10px] font-bold text-primary">{progressPercent}%</span>
+                                )}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              });
+            })()}
+
+            <div className="p-6 bg-secondary-container rounded-xl flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-full">
                 <span className="material-symbols-outlined text-on-secondary-container">lightbulb</span>
               </div>

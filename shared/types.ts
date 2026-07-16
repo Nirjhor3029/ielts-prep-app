@@ -35,6 +35,7 @@ export interface IQuestionSet {
 export interface IChapter {
   _id: string;
   module: 'grammar' | 'vocabulary' | 'reading' | 'listening' | 'writing';
+  moduleTitle: string;
   title: string;
   slug: string;
   order: number;

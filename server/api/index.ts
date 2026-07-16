@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import express, { Router, Request, Response } from 'express';
 import { connectDB } from '../lib/db.js';
 import authRouter from './auth.js';
 import chaptersRouter from './chapters.js';
@@ -24,6 +24,10 @@ app.get('/health', (_req, res) => {
 });
 
 // Vercel serverless: export as default handler
+const serverlessApp = express();
+serverlessApp.use(express.json({ limit: '10mb' }));
+serverlessApp.use('/api', app);
+
 export default async function handler(req: Request, res: Response) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -33,7 +37,7 @@ export default async function handler(req: Request, res: Response) {
     return;
   }
   await connectDB();
-  app(req, res);
+  serverlessApp(req, res);
 }
 
 // Local dev: start Express server
